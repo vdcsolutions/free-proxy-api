@@ -14,9 +14,9 @@ with open(absolute_path, "r+") as f:
     for element in data:
         if "updated_at" not in element:
             element["updated_at"] = now
-            updated_data.append(element)
         else:
             continue
+        updated_data.append(element)
     f.seek(0)
     json.dump(updated_data, f, indent=4)
     f.truncate()
