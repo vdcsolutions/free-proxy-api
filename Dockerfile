@@ -17,11 +17,9 @@ RUN wget https://github.com/mertguvencli/http-proxy-list/archive/refs/heads/main
 #    rm main.zip
 
 
-
-RUN python -m venv /opt/venv &&\
-    /opt/venv/bin/pip install --upgrade pip &&\
-    /opt/venv/bin/pip install --no-cache-dir -r /app/http_proxy_list/requirements.txt &&\
-    /opt/venv/bin/pip install --no-cache-dir -r /app/requirements.txt
+RUN python -m pip install --upgrade pip &&\
+    python -m pip install --no-cache-dir -r /app/http_proxy_list/requirements.txt &&\
+    python -m pip install --no-cache-dir -r /app/requirements.txt
 
 COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh
