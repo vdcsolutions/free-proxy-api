@@ -1,10 +1,7 @@
-rom
-fastapi
-import FastAPI
-import datetime
+from fastapi import FastAPI
 import json
 import os
-import threading
+
 
 app = FastAPI()
 
