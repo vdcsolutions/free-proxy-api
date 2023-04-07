@@ -9,9 +9,7 @@ do
     cd /app
     python add_timestamp.py
     cd /app/http_proxy_list
-    echo "Deleting old data files..."
     rm proxy-list/data.txt proxy-list/data.json
-    echo "Updating proxy list..."
-    python main.py
+    python main.py >/dev/null 2>&1
     sleep 300
 done
