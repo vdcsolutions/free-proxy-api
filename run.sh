@@ -6,10 +6,10 @@ echo "[]" > http_proxy_list/proxy-list/data-with-geolocation.json
 
 while true
 do
-    cd /app
     cd /app/http_proxy_list
     rm proxy-list/data.txt proxy-list/data.json
     python main.py >/dev/null 2>&1
+    cd /app
     python add_timestamp.py
     sleep 300
 done
