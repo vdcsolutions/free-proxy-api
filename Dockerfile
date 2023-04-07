@@ -4,10 +4,10 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y wget unzip
 
-RUN wget https://github.com/vdcsolutions/free-proxy-api/archive/refs/heads/production.zip &&\
-    unzip production.zip &&\
-    mv free-proxy-api-production/* /app/ &&\
-    rm production.zip
+RUN wget https://github.com/vdcsolutions/free-proxy-api/archive/refs/heads/master.zip &&\
+    unzip master.zip &&\
+    mv free-proxy-api-master/* /app/ &&\
+    rm master.zip
 
 RUN wget https://github.com/mertguvencli/http-proxy-list/archive/refs/heads/main.zip &&\
     unzip main.zip &&\
