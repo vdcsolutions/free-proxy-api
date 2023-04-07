@@ -2,9 +2,11 @@ import os
 import json
 import datetime
 
-data_file_path = os.path.abspath("http_proxy_list/proxy-list/data-with-geolocation.json")
 
-with open(data_file_path, "r+") as f:
+relative_path = 'http_proxy_list/proxy-list/data-with-geolocation.json'
+absolute_path = os.path.abspath(relative_path)
+
+with open(absolute_path, "r+") as f:
     data = json.load(f)
 
     now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
