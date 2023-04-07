@@ -16,10 +16,7 @@ with open(absolute_path, "r+") as f:
             element["updated_at"] = now
             updated_data.append(element)
         else:
-            updated_at = datetime.datetime.strptime(element["updated_at"], "%Y-%m-%d %H:%M:%S")
-            if (now - updated_at) <= datetime.timedelta(hours=24):
-                updated_data.append(element)
-
+            continue
     f.seek(0)
     json.dump(updated_data, f, indent=4)
     f.truncate()

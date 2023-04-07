@@ -2,7 +2,7 @@
 
 cd /app
 exec uvicorn api:app --host 0.0.0.0 --port 8000 --workers 4 --log-level info --proxy-headers &
-python add_timestamp.py
+echo "[]" > data-with-geolocation.json
 
 while true
 do
