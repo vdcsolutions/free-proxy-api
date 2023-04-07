@@ -1,14 +1,19 @@
 from fastapi import FastAPI
-import os
 import datetime
 import json
+import os
+import sys
+
+def get_script_path():
+    return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 app = FastAPI()
 
 
+print(os.path.dirname(os.path.realpath(__file__)))
 @app.get("/proxy-list")
 async def get_json_list():
-    # get_proxy_list()
+    print(get_script_path())
     relative_path = 'http-proxy-list/proxy-list/data-with-geolocation.json'
     absolute_path = os.path.abspath(relative_path)
     timestamp = os.path.getmtime(absolute_path)
