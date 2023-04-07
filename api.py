@@ -14,7 +14,7 @@ async def get_json_list():
     timestamp = os.path.getmtime(absolute_path)
     last_modified = datetime.datetime.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
-    with open(absolute_path, 'r') as f:
+    with open(relative_path, 'r') as f:
         json_data = json.load(f)
         for element in json_data:
             element['updated_at'] = last_modified
