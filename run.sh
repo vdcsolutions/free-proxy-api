@@ -10,5 +10,6 @@ do
     rm proxy-list/data.txt proxy-list/data.json
     echo "Updating proxy list..."
     python main.py
+    python ../add_timestamp.py
     sleep 300
 done
