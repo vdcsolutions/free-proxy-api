@@ -11,10 +11,11 @@ app = FastAPI()
 
 
 # Set up the logger
-logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
 
-logger = logging.getLogger(__name__)
+# Set up the logger
+logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+logger = logging.getLogger('__api__')
+
 
 
 @app.get("/live-proxy-list")
