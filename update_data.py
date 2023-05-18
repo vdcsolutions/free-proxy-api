@@ -3,7 +3,7 @@ import json
 import time
 import os
 import logging
-
+from db_handler import DBHandler
 # Set up the logger
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('__update_data__')
@@ -103,6 +103,13 @@ def main():
 
     logger.info(f"{len(data)} entries saved to {dump_filepath}")
 
+    # Create an instance of the DBHandler class
+    db_handler = DBHandler(config_file='config.ini', section='mongodb')
+
+    # Insert the data into MongoDB
+    db_handler.insert_data(data)
+
+    logger.info(f"{len(data)} entries inserted into MongoDB")
 
 if __name__ == '__main__':
     main()

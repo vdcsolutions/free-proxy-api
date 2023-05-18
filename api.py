@@ -7,15 +7,23 @@ from fastapi import FastAPI, Request
 
 app = FastAPI()
 
-# Set up the argument parser
-
-
-# Set up the logger
 
 # Set up the logger
 logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('__api__')
 
+import subprocess
+
+
+async def update_data():
+    global data
+
+    while True:
+        # Your update logic here
+        # This example runs the "update.py" script every 5 minutes
+        await asyncio.sleep(300)
+        subprocess.run(["python", "update_data.py"])
+        data = "new data"
 
 
 @app.get("/live-proxy-list")
