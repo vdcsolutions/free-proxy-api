@@ -1,34 +1,24 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import json
 import os
 import logging
-from fastapi import FastAPI, Request
-
+import subprocess
+import asyncio
 
 app = FastAPI()
 
-
 # Set up the logger
-logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('__api__')
 
-import subprocess
 
-
-async def update_data():
-    global data
-
-    while True:
-        # Your update logic here
-        # This example runs the "update.py" script every 5 minutes
-        await asyncio.sleep(300)
-        subprocess.run(["python", "update_data.py"])
-        data = "new data"
-
-
-@app.get("/live-proxy-list")
+@app.get("/live-proxy-list", name="Get Newest Proxies", tags=["Proxies"])
 async def get_newest_proxies(request: Request):
-    logger.info(f"Request received from {request.client.host} to get newest proxies")
+    """
+    Get the newest proxies from the data file.
+    """
+    logger.info(f"Request received from {request.client.host} to get the newest proxies")
 
     with open(os.path.abspath('http_proxy_list/proxy-list/data-with-geolocation.json'), "r") as f:
         data = json.load(f)
@@ -42,16 +32,39 @@ async def get_newest_proxies(request: Request):
             logger.info(f"{len(filtered_data)} newest proxies returned to {request.client.host}")
             return filtered_data
         else:
-            logger.error(f"Error: data is not a list, request from {request.client.host}")
+            logger.error(f"Error: data is not a list. Request received from {request.client.host}")
             return data
 
 
-@app.get("/proxy-list")
+@app.get("/proxy-list", name="Get Proxy List", tags=["Proxies"])
 async def get_proxy_list(request: Request):
-    logger.info(f"Request received from {request.client.host} to get proxy list")
+    """
+    Get the proxy list from the data file.
+    """
+    logger.info(f"Request received from {request.client.host} to get the proxy list")
 
     with open(os.path.abspath('http_proxy_list/proxy-list/dumped_data.json'), 'r') as f:
         json_data = json.load(f)
 
     logger.info(f"{len(json_data)} proxies returned to {request.client.host}")
     return json_data
+
+
+# Generate OpenAPI schema with proper tags and descriptions
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
+    openapi_schema = get_openapi(
+        title="Your API Name",
+        version="1.0.0",
+        description="Your API Description",
+        routes=app.routes,
+        tags=[
+            {"name": "Proxies", "description": "Endpoints related to proxies"}
+        ],
+    )
+    app.openapi_schema = openapi_schema
+    return app.openapi_schema
+
+
+app.openapi = custom_openapi
