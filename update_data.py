@@ -104,7 +104,7 @@ def main():
     logger.info(f"{len(data)} entries saved to {dump_filepath}")
 
     # Create an instance of the DBHandler class
-    db_handler = DBHandler(config_file='config.ini', section='mongodb')
+    db_handler = DBHandler(config_file='config.ini', section='MONGODB')
 
     # Insert the data into MongoDB
     db_handler.insert_data(data)

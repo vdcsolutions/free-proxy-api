@@ -1,3 +1,4 @@
+
 from pymongo import MongoClient
 import configparser
 
@@ -59,5 +60,8 @@ class DBHandler:
         return expanded
 
     def insert_data(self, data):
-        result = self.collection.insert_one(self.flatten_dict(data))
-        return str(result.inserted_id)
+        for elem in data:
+            print(elem)
+            print(self.flatten_dict(elem))
+            result = self.collection.insert_one(elem)
+            print(str(result.inserted_id))
