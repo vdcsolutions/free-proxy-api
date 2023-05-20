@@ -1,4 +1,4 @@
-#!/bin/sh
+a#!/bin/sh
 
 cd /app
 exec uvicorn api:app --host 0.0.0.0 --port 8000 --workers 4 --log-level info --proxy-headers &
@@ -15,8 +15,8 @@ do
     cd /app
     echo "$timestamp: Updating timestamp and deleting old entries"
     echo "$timestamp: Updating timestamp and deleting old entries"
-    python update_data.py --filepath http_proxy_list/proxy-list/data-with-geolocation.json
+    python update_data.py --filepath /root/app/http_proxy_list/proxy-list/data-with-geolocation.json
     sleep 300
     echo "$timestamp: Removing unused proxy data files"
-    rm proxy-list/data.txt proxy-list/data.json
+    rm  /root/app/http_proxy_list/proxy-list/data.txt /root/app/http_proxy_list/proxy-list/data.json
 done
