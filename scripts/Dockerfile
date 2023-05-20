@@ -22,7 +22,7 @@ RUN python -m pip install --upgrade pip &&\
     python -m pip install --no-cache-dir -r /app/requirements.txt
 
 #COPY run.sh /app/run.sh
-RUN chmod +x /app/run.sh
+RUN chmod +x /app/run.sh > logs.txt
 
 EXPOSE 8080
 
