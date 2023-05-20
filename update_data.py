@@ -87,7 +87,7 @@ def main():
     with open(dump_filepath, 'r+') as f:
         old_data = json.load(f)
 
-    data.extend(old_data)
+    data.extend(old_datacat )
 
     if args.delete_after:
         logger.info(f"Removing entries older than {args.delete_after} hours")

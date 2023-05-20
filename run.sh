@@ -15,7 +15,7 @@ do
     cd /app
     echo "$timestamp: Updating timestamp and deleting old entries"
     echo "$timestamp: Updating timestamp and deleting old entries"
-    python update_data.py --filepath /root/app/http_proxy_list/proxy-list/data-with-geolocation.json
+    python update_data.py --filepath /app/http_proxy_list/proxy-list/data-with-geolocation.json
     sleep 300
     echo "$timestamp: Removing unused proxy data files"
 done
