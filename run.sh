@@ -18,5 +18,4 @@ do
     python update_data.py --filepath /root/app/http_proxy_list/proxy-list/data-with-geolocation.json
     sleep 300
     echo "$timestamp: Removing unused proxy data files"
-    rm  /root/app/http_proxy_list/proxy-list/data.txt /root/app/http_proxy_list/proxy-list/data.json
 done
