@@ -20,7 +20,17 @@ destination_dir="/root"
 for file in "$source_dir"/*; do
     # Check if the item is a file
     if [ -f "$file" ]; then
+        # Extract the file name
+        file_name=$(basename "$file")
+
         # Use scp to copy the file to the remote host
-        scp "$file" "$remote_host:$destination_dir"
+        scp "$file" "$remote_host:$destination_dir/$file_name"
+
+        # Check the exit status of the scp command
+        if [ $? -eq 0 ]; then
+            echo "File $file_name copied successfully."
+        else
+            echo "Error: Failed to copy file $file_name."
+        fi
     fi
 done
