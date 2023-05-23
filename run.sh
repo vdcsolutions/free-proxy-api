@@ -3,7 +3,7 @@
 cd /app
 exec uvicorn api:app --host 0.0.0.0 --port 8000 --workers 4 --log-level info --proxy-headers &
 echo '[  {    "message": "JUST WOKE UP! I AM COOKING FIRST BATCH OF DELICIOUS FREE PROXIES FOR YOU RIGHT NOW, SO CHECK AGAIN IN FEW MINUTES!"  }]' > http-proxy-list/proxy-list/data-with-geolocation.json
-[ -f test.json ] || echo "{}" > http_proxy_list/proxy-list/dumped_data.json
+echo '[  {    "message": "JUST WOKE UP! I AM COOKING FIRST BATCH OF DELICIOUS FREE PROXIES FOR YOU RIGHT NOW, SO CHECK AGAIN IN FEW MINUTES!"  }]' > http-proxy-list/proxy-list/dumped_data.json
 
 while true
 do

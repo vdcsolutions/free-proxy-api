@@ -17,8 +17,6 @@ RUN wget https://github.com/mertguvencli/http-proxy-list/archive/refs/heads/main
     mkdir /app/http-proxy-list && \
     mv http-proxy-list-main/* /app/http-proxy-list
 
-RUN touch /app/http-proxy-list/proxy-list/dumped_data.json
-
 RUN python -m pip install --upgrade pip &&\
     python -m pip install --no-cache-dir -r /app/http-proxy-list/requirements.txt &&\
     python -m pip install --no-cache-dir -r /app/requirements.txt
