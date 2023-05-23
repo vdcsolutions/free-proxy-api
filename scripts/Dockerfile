@@ -26,6 +26,6 @@ RUN python -m pip install --upgrade pip &&\
 #COPY run.sh /app/run.sh
 RUN chmod +x /app/run.sh > logs.txt
 
-EXPOSE 8080
+EXPOSE 8000
 
 CMD ["/app/run.sh"]
