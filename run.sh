@@ -9,7 +9,7 @@ while true
 do
     timestamp=$(date +"%Y-%m-%d %H:%M:%S")
     echo "$timestamp: Starting update process"
-    cd /app/http_proxy_list
+    cd /app/http-proxy-list
     echo "$timestamp: Fetching new proxy data"
     python main.py >/dev/null 2>&1
     cd /app
