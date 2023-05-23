@@ -1,14 +1,13 @@
 #!/bin/bash
 
-# Check if remote host and address arguments are provided
-if [ $# -ne 2 ]; then
-    echo "Usage: sh scp_files.sh remote_host remote_address"
+# Check if remote host argument is provided
+if [ $# -ne 1 ]; then
+    echo "Usage: sh scp_files.sh remote_host"
     exit 1
 fi
 
-# Remote host and address
+# Remote host
 remote_host=$1
-remote_address=$2
 
 # Source directory (current directory)
 source_dir=$(pwd)
@@ -34,3 +33,9 @@ for file in "$source_dir"/*; do
         fi
     fi
 done
+
+# Make first_boot and startup_routine files executable on the server
+ssh "$remote_host" "chmod +x $destination_dir/first_boot.sh $destination_dir/startup_routine.sh"
+
+# Run first_boot on the server
+ssh "$remote_host" "$destination_dir/first_boot.sh"

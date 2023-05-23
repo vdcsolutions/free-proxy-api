@@ -1,4 +1,3 @@
-import argparse
 import json
 import time
 import os
@@ -52,7 +51,7 @@ def remove_old_dicts(data, time_threshold=86400):
 
 
 def main():
-    data_file_path = '/app/http_proxy_list/proxy-list/data-with-geolocation.json'
+    data_file_path = '/app/http-proxy-list/proxy-list/data-with-geolocation.json'
     dump_file_path = os.path.join(os.path.dirname(data_file_path), 'dumped_data.json')
 
     # Check if data file exists
@@ -68,8 +67,7 @@ def main():
     logger.info(f"Processing data file: {data_file_path}")
 
     # Open the data file and apply the timestamp
-    with open(data_file_path, 'r+') as data_file:
-        data = add_timestamp(data_file)
+    data = add_timestamp(data_file_path)
 
     # Create an instance of the DBHandler class
     db_handler = DBHandler(config_file='config.ini', section='MONGODB')
@@ -84,7 +82,7 @@ def main():
     # Open the dump file
     with open(dump_file_path, 'r+') as dump_file:
         old_data = json.load(dump_file)
-        # Make it empty file
+        # Make it an empty file
         dump_file.truncate(0)
 
     data.extend(old_data)
