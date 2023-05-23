@@ -24,7 +24,7 @@ docker network create mynetwork >/dev/null 2>&1
 
 # Build Docker image 'app' from the Dockerfile
 echo "Building Docker image 'app'..."
-docker build -t app /root/app/scripts >/dev/null
+docker build -t app /root/ --no-cache >/dev/null
 
 # Run the 'app' container in 'mynetwork'
 echo "Running 'app' container in 'mynetwork'..."
@@ -32,7 +32,7 @@ docker run -d -p 8000:8000 --network mynetwork --network-alias app --name app-co
 
 # Run Nginx container in 'mynetwork' with default.conf
 echo "Running Nginx container in 'mynetwork'..."
-docker run -d -p 80:80 --network mynetwork --name nginx-container -v /root/app/scripts/default.conf:/etc/nginx/conf.d/default.conf nginx >/dev/null
+docker run -d -p 80:80 --network mynetwork --name nginx-container -v /root/default.conf:/etc/nginx/conf.d/default.conf nginx >/dev/null
 
 # Print Docker network 'mynetwork' information
 echo "Docker network 'mynetwork' details:"
