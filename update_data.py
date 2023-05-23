@@ -68,12 +68,12 @@ def main():
 
     # Open the data file and apply the timestamp
     data = add_timestamp(data_file_path)
-
+    new_data = data.copy()
     # Create an instance of the DBHandler class
     db_handler = DBHandler(config_file='config.ini', section='MONGODB')
 
     # Insert the data into MongoDB
-    db_handler.insert_data(data)
+    db_handler.insert_data(new_data)
 
     logger.info(f"{len(data)} entries inserted into MongoDB")
 
@@ -81,7 +81,12 @@ def main():
 
     # Open the dump file
     with open(dump_file_path, 'r+') as dump_file:
-        old_data = json.load(dump_file)
+        try:
+            old_data = json.load(dump_file)
+        except json.JSONDecodeError:
+            logger.warning("Invalid JSON content in dump file. Initializing old_data as an empty list.")
+            old_data = []
+
         # Make it an empty file
         dump_file.truncate(0)
 
@@ -92,6 +97,11 @@ def main():
 
     # Remove duplicate IPs
     data = remove_duplicates_by_ip(data)
+    for item in data:
+        item['_id'] = str(item['_id'])
+
+    print(data)
+    print(type(data))
 
     # Dump the updated data into the dump file
     with open(dump_file_path, 'w') as dump_file:
