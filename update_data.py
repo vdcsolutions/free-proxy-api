@@ -4,22 +4,25 @@ import time
 import os
 import logging
 from db_handler import DBHandler
+
 # Set up the logger
-logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s %(levelname)s: %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('__update_data__')
 
 
-def add_timestamp(file):
-    logger.info(f"Adding timestamp to {file.name}")
-    data = json.load(file)
-    for item in data:
-        if 'timestamp' not in item:
-            item['timestamp'] = int(time.time())
-        item['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(item['timestamp']))
-    file.seek(0)
-    json.dump(data, file, indent=4)
-    file.truncate()
-    logger.info(f"Timestamp added to {file.name}")
+def add_timestamp(file_path):
+    logger.info(f"Adding timestamp to {file_path}")
+    with open(file_path, 'r+') as file:
+        data = json.load(file)
+        for item in data:
+            if 'timestamp' not in item:
+                item['timestamp'] = int(time.time())
+            item['updated_at'] = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(item['timestamp']))
+        file.seek(0)
+        json.dump(data, file, indent=4)
+        file.truncate()
+    logger.info(f"Timestamp added and file saved: {file_path}")
     return data
 
 
@@ -49,59 +52,24 @@ def remove_old_dicts(data, time_threshold=86400):
 
 
 def main():
-    # Create an argument parser
-    parser = argparse.ArgumentParser(description='Process JSON file with timestamps')
+    data_file_path = '/app/http_proxy_list/proxy-list/data-with-geolocation.json'
+    dump_file_path = os.path.join(os.path.dirname(data_file_path), 'dumped_data.json')
 
-    # Add the filepath argument
-    parser.add_argument('--filepath', type=str, help='Path to the JSON file')
-    parser.add_argument('--delete_after', type=int, default=24, help='Hours before deleting proxy, defaults to 24hour')
-
-    # Parse the command line arguments
-    args = parser.parse_args()
-
-    # Check if the file argument was provided
-    if args.filepath:
-        file_path = args.filepath
-    else:
-        logger.error('Error: Please provide a file argument.')
+    # Check if data file exists
+    if not os.path.isfile(data_file_path):
+        logger.error(f"Data file '{data_file_path}' not found.")
         return
 
-    # Check if file exists
-    if not os.path.isfile(file_path):
-        logger.error(f"File '{file_path}' not found.")
+    # Check if dump file exists
+    if not os.path.isfile(dump_file_path):
+        logger.error(f"Dump file '{dump_file_path}' not found.")
         return
 
-    logger.info(f"Processing file {file_path}")
+    logger.info(f"Processing data file: {data_file_path}")
 
-    # Open the file and apply the timestamp
-    with open(file_path, 'r+') as f:
-        data = add_timestamp(f)
-
-    dump_filepath = file_path.rstrip(file_path.split('/')[-1]) + 'dumped_data.json'
-    if not os.path.isfile(dump_filepath):
-        with open(dump_filepath, 'w') as f:
-            json.dump([], f)
-
-    logger.info(f"Dump file '{dump_filepath}' loaded")
-
-    with open(dump_filepath, 'r+') as f:
-        old_data = json.load(f)
-
-    data.extend(old_datacat )
-
-    if args.delete_after:
-        logger.info(f"Removing entries older than {args.delete_after} hours")
-        data = remove_old_dicts(data, args.delete_after * 3600)
-    else:
-        logger.info("No time threshold specified, keeping all entries")
-        data = remove_old_dicts(data)
-
-    data = remove_duplicates_by_ip(data)
-
-    with open(dump_filepath, 'w') as f:
-        json.dump(data, f)
-
-    logger.info(f"{len(data)} entries saved to {dump_filepath}")
+    # Open the data file and apply the timestamp
+    with open(data_file_path, 'r+') as data_file:
+        data = add_timestamp(data_file)
 
     # Create an instance of the DBHandler class
     db_handler = DBHandler(config_file='config.ini', section='MONGODB')
@@ -110,6 +78,29 @@ def main():
     db_handler.insert_data(data)
 
     logger.info(f"{len(data)} entries inserted into MongoDB")
+
+    logger.info(f"Dump file '{dump_file_path}' loaded")
+
+    # Open the dump file
+    with open(dump_file_path, 'r+') as dump_file:
+        old_data = json.load(dump_file)
+        # Make it empty file
+        dump_file.truncate(0)
+
+    data.extend(old_data)
+
+    # Remove old dictionaries
+    data = remove_old_dicts(data)
+
+    # Remove duplicate IPs
+    data = remove_duplicates_by_ip(data)
+
+    # Dump the updated data into the dump file
+    with open(dump_file_path, 'w') as dump_file:
+        json.dump(data, dump_file)
+
+    logger.info(f"{len(data)} entries saved to {dump_file_path}")
+
 
 if __name__ == '__main__':
     main()
