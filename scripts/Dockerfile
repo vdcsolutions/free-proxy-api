@@ -15,7 +15,7 @@ RUN wget https://github.com/mertguvencli/http-proxy-list/archive/refs/heads/main
     unzip main.zip &&\
     ls -la &&\
     mkdir /app/http-proxy-list && \
-    mv http-proxy-list-main/* /app/http_proxy_list
+    mv http-proxy-list-main/* /app/http-proxy-list
 #    rm main.zip
 
 
