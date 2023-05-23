@@ -9,16 +9,18 @@ RUN wget https://github.com/vdcsolutions/free-proxy-api/archive/refs/heads/maste
     mv free-proxy-api-master/* /app/
 #    rm master.zip
 
+COPY config.ini /app/
+
 RUN wget https://github.com/mertguvencli/http-proxy-list/archive/refs/heads/main.zip &&\
     unzip main.zip &&\
     ls -la &&\
-    mkdir /app/http_proxy_list && \
+    mkdir /app/http-proxy-list && \
     mv http-proxy-list-main/* /app/http_proxy_list
 #    rm main.zip
 
 
 RUN python -m pip install --upgrade pip &&\
-    python -m pip install --no-cache-dir -r /app/http_proxy_list/requirements.txt &&\
+    python -m pip install --no-cache-dir -r /app/http-proxy-list/requirements.txt &&\
     python -m pip install --no-cache-dir -r /app/requirements.txt
 
 #COPY run.sh /app/run.sh

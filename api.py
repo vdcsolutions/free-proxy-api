@@ -1,9 +1,9 @@
 from fastapi import FastAPI, Request
+from fastapi.openapi.utils import get_openapi
 import json
 import os
 import logging
-import subprocess
-import asyncio
+
 
 app = FastAPI()
 
@@ -13,7 +13,7 @@ logging.basicConfig(filename='logs.log', level=logging.INFO, format='%(asctime)s
 logger = logging.getLogger('__api__')
 
 
-@app.get("/live-proxy-list", name="Get Newest Proxies", tags=["Proxies"])
+@app.get("/live-proxy-list", name="Get newest free proxies (refreshes every 5 minutes)")
 async def get_newest_proxies(request: Request):
     """
     Get the newest proxies from the data file.
@@ -36,7 +36,7 @@ async def get_newest_proxies(request: Request):
             return data
 
 
-@app.get("/proxy-list", name="Get Proxy List", tags=["Proxies"])
+@app.get("/proxy-list", name="Get free proxies from last 24hours")
 async def get_proxy_list(request: Request):
     """
     Get the proxy list from the data file.
@@ -55,16 +55,19 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
-        title="Your API Name",
+        title="Free Proxy API",
         version="1.0.0",
-        description="Your API Description",
+        description="Providing free proxies for any use",
         routes=app.routes,
-        tags=[
-            {"name": "Proxies", "description": "Endpoints related to proxies"}
-        ],
-    )
+          )
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
 
 app.openapi = custom_openapi
+
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -2,3 +2,4 @@
 http_proxy_list/
 __pycache__/
 logs.log
+scripts/config.ini
